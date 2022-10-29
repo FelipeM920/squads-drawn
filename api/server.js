@@ -1,1 +1,1 @@
-console.log(process.env.API_URL || 'asd')
+console.log(process.env.DB_PASSWORD || 'asd')
