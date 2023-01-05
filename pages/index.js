@@ -2,6 +2,20 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
+export async function getServerSideProps(context) {
+  let res = await fetch("http://localhost:3000/api/posts", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  let allPosts = await res.json();
+  console.log('allPosts', allPosts)
+  return {
+    props: { allPosts },
+  };
+}
+
 export default function Home() {
   return (
     <div className={styles.container}>
