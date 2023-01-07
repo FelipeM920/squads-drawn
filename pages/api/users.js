@@ -3,30 +3,52 @@ import clientPromise from "../../lib/mongodb";
 export default async function handler(req, res) {
   const client = await clientPromise;
   const db = client.db("sorteadorDB");
+  const options = { upsert: true, returnDocument: 'after' };
   switch (req.method) {
     case "POST":
       let bodyObject = JSON.parse(req.body);
       let myPost = await db.collection("users").insertOne(bodyObject);
-      res.json(myPost.ops[0]);
+      let postResult = await db.collection("users").findOne({ _id: myPost.insertedId })
+      res.json(postResult);
       break;
     case "GET":
       const allPosts = await db.collection("users").find({}).toArray();
       res.json({ status: 200, data: allPosts });
       break;
+    case "PUT":
+      const { id, checkStatus } = JSON.parse(req.body);
+      let myPut = await db.collection("users").updateOne(
+        {
+          userId: id
+        },
+        {
+          $set: {
+            checked_for_draw: checkStatus
+          },
+        }
+      );
+      res.json(myPut);
+      break;
+    case "DELETE":
+      const { userId } = JSON.parse(req.body);
+      let myDelete = await db.collection("users").deleteOne({
+        userId: userId,
+      });
+      res.json(myDelete);
+      break;
   }
 }
 
-// export async function getServerSideProps(context) {
-//   let res = await fetch("http://localhost:3000/api/posts", {
+// export async function getServerSideProps() {
+//   let res = await fetch(`${process.env.API_URL}/api/users`, {
 //     method: "GET",
 //     headers: {
 //       "Content-Type": "application/json",
 //     },
 //   });
-//   let allPosts = await res.json();
-
+//   let allUsers = await res.json();
 //   return {
-//     props: { allPosts },
+//     props: { allUsers },
 //   };
 // }
 
