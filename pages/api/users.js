@@ -8,7 +8,7 @@ export default async function handler(req, res) {
     case "POST":
       let bodyObject = JSON.parse(req.body);
       let myPost = await db.collection("users").insertOne(bodyObject);
-      let postResult = await db.collection("users").findOne({ _id: myPost.insertedId })
+      let postResult = await db.collection("users").find({}).toArray();
       res.json(postResult);
       break;
     case "GET":
@@ -16,25 +16,29 @@ export default async function handler(req, res) {
       res.json({ status: 200, data: allPosts });
       break;
     case "PUT":
-      const { id, checkStatus } = JSON.parse(req.body);
+      const { id, checkStatus, name, timesDrawn } = JSON.parse(req.body);
       let myPut = await db.collection("users").updateOne(
         {
           userId: id
         },
         {
           $set: {
-            checked_for_draw: checkStatus
+            checked_for_draw: checkStatus,
+            name: name,
+            times_drawn: timesDrawn
           },
         }
       );
-      res.json(myPut);
+      let allUsersAfterUpdate = await db.collection("users").find({}).toArray();
+      res.json({ status: 200, data: allUsersAfterUpdate });
       break;
     case "DELETE":
       const { userId } = JSON.parse(req.body);
       let myDelete = await db.collection("users").deleteOne({
         userId: userId,
       });
-      res.json(myDelete);
+      let allUsers = await db.collection("users").find({}).toArray();
+      res.json({ status: 200, data: allUsers });
       break;
   }
 }
