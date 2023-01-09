@@ -77,9 +77,8 @@ export default function Home({ allUsers }) {
         key={user.userId}>
         <button onClick={() => handleDelete(user.userId)}>delete</button>
         <Checkbox
-          userId={user.userId}
-          name={user.name}
-          checked={user.checked_for_draw}
+          user={user}
+          setUsers={setUsers}
         ></Checkbox>
         <span>{user.name}</span>
       </div>
@@ -91,16 +90,15 @@ export default function Home({ allUsers }) {
   }
 
   function handleUpdateUser(userForUpdate) {
-    callUpdate(userForUpdate).then(response => {
-      console.log(response)
-      setUsers(response);
-    })
+    callUpdate(userForUpdate);
   }
 
   function handleDrawn() {
-    const drawnNumber = Math.floor(Math.random() * users.length)
-    const user = users[drawnNumber];
-    user.checked = !user.checked;
+    console.log('users', users)
+    const userForDrawn = users.filter(user => user.checked_for_draw);
+    const drawnNumber = Math.floor(Math.random() * userForDrawn.length);
+    const user = users.find(user => user === userForDrawn[drawnNumber])
+    user.checked_for_draw = !user.checked_for_draw;
     user.times_drawn++;
     setDrawn(user.name);
     handleUpdateUser(user);
