@@ -7,7 +7,8 @@ async function call(user, checkStatus) {
       id: user.userId,
       checkStatus: checkStatus,
       name: user.name,
-      timesDrawn: user.times_drawn
+      timesDrawn: user.times_drawn,
+      squad: user.squad,
     }),
   });
   let users = await res.json();
