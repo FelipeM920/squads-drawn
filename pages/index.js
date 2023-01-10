@@ -107,7 +107,8 @@ export default function Home({ allUsers, allSquads }) {
   function userDisplay(user) {
     return (
       <div
-        key={user.userId}>
+        key={user.userId}
+        className={styles.user}>
         <button onClick={() => handleDelete(user.userId)}>delete</button>
         <Checkbox
           user={user}
@@ -118,11 +119,11 @@ export default function Home({ allUsers, allSquads }) {
     )
   }
 
- function squadDisplay(squad){
-  return (
-    <option key={squad.id} value={squad.id}>{squad.name}</option>
-  )
- }
+  function squadDisplay(squad) {
+    return (
+      <option key={squad.id} value={squad.id}>{squad.name}</option>
+    )
+  }
 
   function handleInput(event) {
     nameToAdd = event.target.value;
@@ -134,6 +135,9 @@ export default function Home({ allUsers, allSquads }) {
 
   function handleDrawn() {
     const userForDrawn = users.filter(user => user.checked_for_draw);
+
+    if (!userForDrawn || !userForDrawn.length) return;
+
     const drawnNumber = Math.floor(Math.random() * userForDrawn.length);
     const user = users.find(user => user === userForDrawn[drawnNumber])
     user.checked_for_draw = !user.checked_for_draw;
@@ -161,28 +165,35 @@ export default function Home({ allUsers, allSquads }) {
   }
 
   return (
-    <section>
-      <div>
-        <label>Squad:</label>
-        <select onChange={handleSquadChange}>
-          {squads.length > 0 && squads.map(squad => squadDisplay(squad))}
-        </select>
+    <section className={styles.main}>
+      <div className={styles.dropdown_container}>
+        <div className={styles.dropdown_squads}>
+          <label>Squad:</label>
+          <select onChange={handleSquadChange}>
+            {squads.length > 0 && squads.map(squad => squadDisplay(squad))}
+          </select>
+          <div>
+            <input type="text" onChange={e => handleSquadInput(e)}></input>
+            <button onClick={handleAddSquad}>Adicionar Squad</button>
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="text" onChange={e => handleSquadInput(e)}></input>
-        <button onClick={handleAddSquad}>Adicionar Squad</button>
+      <div className={styles.drawn_container}>
+        <div className={styles.drawn_users}>
+          <div>
+            {users.length > 0 && users.map(user => userDisplay(user))}
+          </div>
+          <div>
+            <input type="text" onChange={e => handleInput(e)} />
+            <button onClick={() => handleInsert()}>Adicionar</button>
+          </div>
+        </div>
+        <div className={styles.drawn_button_container}>
+          <button className={styles.drawn_button} onClick={handleDrawn}>Sortear</button>
+        </div>
+        <div className={styles.drawn_name}>{drawn}</div>
       </div>
-      <div>
-        {users.length > 0 && users.map(user => userDisplay(user))}
-      </div>
-      <div>
-        <input type="text" onChange={e => handleInput(e)} />
-        <button onClick={() => handleInsert()}>Adicionar</button>
-      </div>
-      <div>
-        <button onClick={handleDrawn}>Sortear</button>
-      </div>
-      <div>{drawn}</div>
+      <div>made with 💖 by <a className={styles.link} href="https://github.com/FelipeM920">Felipe</a></div>
     </section>
   )
 }
