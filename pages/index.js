@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Checkbox from '../components/checkbox/index'
+import Modal from '../components/modal/index'
 import styles from '../styles/Home.module.css'
 
 export async function getServerSideProps() {
@@ -83,6 +84,9 @@ export default function Home({ allUsers, allSquads }) {
   const [squads, setSquads] = useState([]);
   const [drawn, setDrawn] = useState('?');
   const [squad, setSquad] = useState(1);
+  const [showModalReset, setShowModalReset] = useState(false);
+  const modalResetTitle = 'Title';
+  const modalResetMainText = 'Main Text';
   let nameToAdd = 'Nome';
   let squadNameToAdd = 'SquadName';
 
@@ -109,7 +113,8 @@ export default function Home({ allUsers, allSquads }) {
       <div
         key={user.userId}
         className={styles.user}>
-        <button onClick={() => handleDelete(user.userId)}>delete</button>
+        {/* <button onClick={() => handleDelete(user.userId)}>delete</button> */}
+        <button className={styles.user_edit_button} onClick={() => setShowModalReset(true)}>Editar</button>
         <Checkbox
           user={user}
           setUsers={setUsers}
@@ -164,8 +169,21 @@ export default function Home({ allUsers, allSquads }) {
     });
   }
 
+  function closeModalReset(reset) {
+    setShowModalReset(false);
+  }
+
   return (
     <section className={styles.main}>
+      <Modal
+        show={showModalReset}
+        handleClose={closeModalReset}
+        buttonConfirmName={'RESETAR'}
+        buttonCancelName={'CANCELAR'}
+        title={modalResetTitle}
+        mainText={modalResetMainText}
+      >
+      </Modal>
       <div className={styles.dropdown_container}>
         <div className={styles.dropdown_squads}>
           <label>Squad:</label>
