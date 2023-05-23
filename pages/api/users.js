@@ -37,8 +37,7 @@ export default async function handler(req, res) {
       let myDelete = await db.collection("users").deleteOne({
         userId: userId,
       });
-      let allUsers = await db.collection("users").find({}).toArray();
-      res.json({ status: 200, data: allUsers });
+      res.json({ status: 200, data: myDelete });
       break;
   }
 }

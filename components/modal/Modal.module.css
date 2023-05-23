@@ -3,9 +3,11 @@
   top: 0;
   left: 0;
   width: 100%;
+  min-width: 45%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.9);
   z-index: 3;
+  color: #000;
 }
 
 .modal_main {
@@ -13,14 +15,14 @@
   flex-direction: column;
   position: fixed;
   background: white;
-  width: 90%;
+  width: auto;
+  min-width: 35%;
   height: auto;
-  top: 50%;
+  top: 20%;
   left: 48%;
   transform: translate(-50%, -50%);
   padding: 50px 0 20px;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
+  border-radius: 20px;
 }
 
 .modal_main__container {
@@ -28,22 +30,34 @@
   flex-direction: column;
 }
 
-.modal_main__buttons-container {
+.modal_main__buttons_container {
   display: flex;
   justify-content: space-evenly;
 }
 
-.modal_main__cancel-button,
-.modal_main__confirm-button {
-  border: 1px solid #b8bbbf;
+.modal_main__cancel_button,
+.modal_main__confirm_button {
+  border: 1px solid;
   padding: 10px;
   min-width: 45%;
   border-radius: 20px;
+  cursor: pointer;
 }
 
-.modal_main__confirm-button {
-  background-color: #000;
-  color: #fff;
+.modal_main__cancel_button {
+  background: rgba(153, 0, 0);
+}
+
+.modal_main__cancel_button:hover {
+  background: rgba(153, 0, 0, 0.8);
+}
+
+.modal_main__confirm_button {
+  background: rgba(0, 128, 0);
+}
+
+.modal_main__confirm_button:hover {
+  background: rgba(0, 128, 0, 0.8);
 }
 
 .modal_main__title {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Checkbox from '../components/checkbox/index'
 import Modal from '../components/modal/index'
 import styles from '../styles/Home.module.css'
+import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 
 export async function getServerSideProps() {
   let squadRes = await fetch(`${process.env.API_URL}/api/squads`, {
@@ -61,6 +62,7 @@ async function callDelete(userId) {
       userId: userId
     })
   });
+
   let users = await res.json();
   return users.data;
 }
@@ -84,9 +86,13 @@ export default function Home({ allUsers, allSquads }) {
   const [squads, setSquads] = useState([]);
   const [drawn, setDrawn] = useState('?');
   const [squad, setSquad] = useState(1);
-  const [showModalReset, setShowModalReset] = useState(false);
-  const modalResetTitle = 'Title';
-  const modalResetMainText = 'Main Text';
+  const [userSelected, setUserSelected] = useState(0);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const deleteModalTexts = {
+    modalDeleteTitle: 'Tem certeza que deseja excluir?',
+    modalDeleteMainText: `O usuário ${userSelected.name} será excluído permanentemente.`
+  }
+
   let nameToAdd = 'Nome';
   let squadNameToAdd = 'SquadName';
 
@@ -102,9 +108,11 @@ export default function Home({ allUsers, allSquads }) {
     });
   }
 
-  function handleDelete(userId) {
-    callDelete(userId).then(response => {
-      setUsers(response);
+  function handleDelete(userId, userSquadId) {
+    callDelete(userId).then(() => {
+      callGet(userSquadId).then((response) => {
+        setUsers(response);
+      })
     });
   }
 
@@ -113,8 +121,9 @@ export default function Home({ allUsers, allSquads }) {
       <div
         key={user.userId}
         className={styles.user}>
-        {/* <button onClick={() => handleDelete(user.userId)}>delete</button> */}
-        <button className={styles.user_edit_button} onClick={() => setShowModalReset(true)}>Editar</button>
+        <button className={styles.user_delete_button} onClick={() => { setUserSelected(user); setShowDeleteModal(true); }}>
+          <DeleteForeverOutlinedIcon fontSize='small'/>
+        </button>
         <Checkbox
           user={user}
           setUsers={setUsers}
@@ -169,19 +178,21 @@ export default function Home({ allUsers, allSquads }) {
     });
   }
 
-  function closeModalReset(reset) {
-    setShowModalReset(false);
+  function closeModalDelete(okForDelete) {
+    if (okForDelete)
+      handleDelete(userSelected.userId, userSelected.squad);
+    setShowDeleteModal(false);
   }
 
   return (
     <section className={styles.main}>
       <Modal
-        show={showModalReset}
-        handleClose={closeModalReset}
-        buttonConfirmName={'RESETAR'}
-        buttonCancelName={'CANCELAR'}
-        title={modalResetTitle}
-        mainText={modalResetMainText}
+        show={showDeleteModal}
+        handleClose={closeModalDelete}
+        buttonConfirmName={'Sim'}
+        buttonCancelName={'Não'}
+        title={deleteModalTexts.modalDeleteTitle}
+        mainText={deleteModalTexts.modalDeleteMainText}
       >
       </Modal>
       <div className={styles.dropdown_container}>
