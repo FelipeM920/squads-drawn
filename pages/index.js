@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Checkbox from '../components/checkbox/index'
 import Modal from '../components/modal/index'
 import styles from '../styles/Home.module.css'
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
+import GravatarIcon from '../components/gravatarIcon';
+import md5 from 'blueimp-md5';
 
 export async function getServerSideProps() {
   let squadRes = await fetch(`${process.env.API_URL}/api/squads`, {
@@ -74,7 +76,8 @@ async function callUpdate(userForUpdate) {
       id: userForUpdate.userId,
       checkStatus: userForUpdate.checked_for_draw,
       name: userForUpdate.name,
-      timesDrawn: userForUpdate.times_drawn
+      timesDrawn: userForUpdate.times_drawn,
+      gravatarHash: userForUpdate.gravatar_hash,
     })
   });
   let users = await res.json();
@@ -88,9 +91,16 @@ export default function Home({ allUsers, allSquads }) {
   const [squad, setSquad] = useState(1);
   const [userSelected, setUserSelected] = useState(0);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showGravatarModal, setShowGravatarModal] = useState(false);
+  const inputEmailGravatarRef = useRef(null);
   const deleteModalTexts = {
     modalDeleteTitle: 'Tem certeza que deseja excluir?',
     modalDeleteMainText: `O usuário ${userSelected.name} será excluído permanentemente.`
+  }
+
+  const gravatarModalTexts = {
+    modalGravatarTitle: 'Atualizar Imagem do Gravatar',
+    modalGravatarMainText: `Insira o email do Gravatar para atualizar a imagem do usuário.`,
   }
 
   let nameToAdd = 'Nome';
@@ -116,19 +126,33 @@ export default function Home({ allUsers, allSquads }) {
     });
   }
 
+  function createGravatarModalBody() {
+    return (
+      <div className={styles.gravatar_modal_body}>
+        <a href='https://en.gravatar.com/' target='_blank' rel="noreferrer">Gravatar</a>
+        <input type="text" id="gravatarEmail" name="gravatarEmail" placeholder="Email do Gravatar" ref={inputEmailGravatarRef} />
+      </div>
+    )
+  }
+
   function userDisplay(user) {
     return (
       <div
         key={user.userId}
         className={styles.user}>
         <button className={styles.user_delete_button} onClick={() => { setUserSelected(user); setShowDeleteModal(true); }}>
-          <DeleteForeverOutlinedIcon fontSize='small'/>
+          <DeleteForeverOutlinedIcon fontSize='small' />
         </button>
         <Checkbox
           user={user}
           setUsers={setUsers}
         ></Checkbox>
-        <span>{user.name}</span>
+        <span className={styles.user_name}>{user.name}</span>
+        <div onClick={() => {setUserSelected(user); setShowGravatarModal(true)}}>
+          <GravatarIcon
+            user={user}
+          ></GravatarIcon>
+        </div>
       </div>
     )
   }
@@ -184,6 +208,16 @@ export default function Home({ allUsers, allSquads }) {
     setShowDeleteModal(false);
   }
 
+  function closeModalGravatar(okForGravatar) {
+    if(okForGravatar) {
+      let hashedEmail = md5(inputEmailGravatarRef.current.value);
+      userSelected.gravatar_hash = hashedEmail;
+      handleUpdateUser(userSelected)
+      setShowGravatarModal(false);
+    }
+    setShowGravatarModal(false);
+  }
+
   return (
     <section className={styles.main}>
       <Modal
@@ -194,6 +228,16 @@ export default function Home({ allUsers, allSquads }) {
         title={deleteModalTexts.modalDeleteTitle}
         mainText={deleteModalTexts.modalDeleteMainText}
       >
+      </Modal>
+      <Modal
+        show={showGravatarModal}
+        handleClose={closeModalGravatar}
+        buttonConfirmName={'Atualizar'}
+        buttonCancelName={'Cancelar'}
+        title={gravatarModalTexts.modalGravatarTitle}
+        mainText={gravatarModalTexts.modalGravatarMainText}
+      >
+        {createGravatarModalBody()}
       </Modal>
       <div className={styles.dropdown_container}>
         <div className={styles.dropdown_squads}>

@@ -9,6 +9,7 @@ async function call(user, checkStatus) {
       name: user.name,
       timesDrawn: user.times_drawn,
       squad: user.squad,
+      gravatarHash: user.gravatar_hash,
     }),
   });
   let users = await res.json();

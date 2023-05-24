@@ -16,7 +16,7 @@ export default async function handler(req, res) {
       res.json({ status: 200, data: allPosts });
       break;
     case "PUT":
-      const { id, checkStatus, name, timesDrawn, squad } = JSON.parse(req.body);
+      const { id, checkStatus, name, timesDrawn, squad, gravatarHash } = JSON.parse(req.body);
       let myPut = await db.collection("users").updateOne(
         {
           userId: id
@@ -25,7 +25,8 @@ export default async function handler(req, res) {
           $set: {
             checked_for_draw: checkStatus,
             name: name,
-            times_drawn: timesDrawn
+            times_drawn: timesDrawn,
+            gravatar_hash: gravatarHash,
           },
         }
       );

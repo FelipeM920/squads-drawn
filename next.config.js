@@ -2,6 +2,15 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'www.gravatar.com',
+        pathname: '/avatar/**',
+      },
+    ],
+  },
 }
 
 module.exports = nextConfig
