@@ -148,7 +148,7 @@ export default function Home({ allUsers, allSquads }) {
           setUsers={setUsers}
         ></Checkbox>
         <span className={styles.user__name}>{user.name}</span>
-        <div onClick={() => {setUserSelected(user); setShowGravatarModal(true)}}>
+        <div onClick={() => { setUserSelected(user); setShowGravatarModal(true) }}>
           <GravatarIcon
             user={user}
           ></GravatarIcon>
@@ -185,8 +185,8 @@ export default function Home({ allUsers, allSquads }) {
   }
 
   function handleSquadChange(event) {
-    setSquad(Number(event.target.value));
-    callGet(event.target.value).then(response => {
+    setSquad(Number(event.target.getAttribute('value')));
+    callGet(event.target.getAttribute('value')).then(response => {
       setUsers(response);
     });
   }
@@ -209,13 +209,22 @@ export default function Home({ allUsers, allSquads }) {
   }
 
   function closeModalGravatar(okForGravatar) {
-    if(okForGravatar) {
+    if (okForGravatar) {
       let hashedEmail = md5(inputEmailGravatarRef.current.value);
       userSelected.gravatar_hash = hashedEmail;
       handleUpdateUser(userSelected)
       setShowGravatarModal(false);
     }
     setShowGravatarModal(false);
+  }
+
+  function squadDisplaytab(squadTab) {
+    const classes = squadTab.id === squad ? `${styles.nav__tabs} ${styles.nav__active}` : `${styles.nav__tabs}`;
+    return (
+      <div key={squadTab.id} value={squadTab.id} onClick={handleSquadChange} className={classes}>
+        {squadTab.name}
+      </div>
+    )
   }
 
   return (
@@ -239,18 +248,15 @@ export default function Home({ allUsers, allSquads }) {
       >
         {createGravatarModalBody()}
       </Modal>
-      <div className={styles.dropdown__container}>
-        <div className={styles.dropdown__squads}>
-          <label>Squad:</label>
-          <select onChange={handleSquadChange}>
-            {squads.length > 0 && squads.map(squad => squadDisplay(squad))}
-          </select>
-          <div>
-            <input type="text" onChange={e => handleSquadInput(e)}></input>
-            <button onClick={handleAddSquad}>Adicionar Squad</button>
-          </div>
+
+      <nav id='nav' className={styles.nav__container}>
+        {squads.length > 0 && squads.map(squad => squadDisplaytab(squad))}
+
+        <div className={styles.nav__new_tab_container}>
+          <input className={styles.nav__new_tab_container_input} type="text" onChange={e => handleSquadInput(e)}></input>
+          <button className={styles.nav__new_tab_container_button} onClick={handleAddSquad}>+</button>
         </div>
-      </div>
+      </nav>
       <div className={styles.drawn__container}>
         <div className={styles.drawn__users}>
           <div>

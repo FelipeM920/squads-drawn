@@ -101,3 +101,51 @@
     }
   }
 }
+
+.nav {
+  &__container {
+    display: flex;
+    border-bottom: 1px solid #fff;
+  }
+
+  &__tabs {
+    display: flex;
+    padding: 10px 20px;
+    margin: 0 5px;
+    border: 1px solid #fff;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    cursor: pointer;
+  }
+
+  &__active {
+    background: #fff;
+    color: #000;
+  }
+
+  &__new_tab_container {
+    display: flex;
+    margin-left: 5px;
+
+    &_button {
+      display: flex;
+      align-items: center;
+      border: 1px solid #fff;
+      padding: 0 10px;
+      border-top-right-radius: 10px;
+      background: rgba(0, 128, 0);
+      cursor: pointer;
+
+      &:hover {
+        background: rgba(0, 128, 0, 0.8);
+      }
+    }
+
+    &_input {
+      display: flex;
+      border: 1px solid #fff;
+      border-top-left-radius: 10px;
+      outline: none;
+    }
+  }
+}
