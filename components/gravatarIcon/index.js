@@ -1,9 +1,9 @@
 import React from "react";
 import Image from 'next/image'
-import styles from './Gravatar.module.css'
+import styles from './Gravatar.module.scss'
 
 function GravatarIcon({ user }) {
-  const userAlreadyDrawed = user.checked_for_draw ? '' : styles.image_container_drawed;
+  const userAlreadyDrawed = user.checked_for_draw ? '' : styles.image_container__drawed;
   return (
     <div className={`${styles.image_container} ${userAlreadyDrawed}`}>
       <Image

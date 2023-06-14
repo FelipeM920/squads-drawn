@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Checkbox from '../components/checkbox/index'
 import Modal from '../components/modal/index'
-import styles from '../styles/Home.module.css'
+import styles from '../styles/Home.module.scss'
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import GravatarIcon from '../components/gravatarIcon';
 import md5 from 'blueimp-md5';
@@ -128,7 +128,7 @@ export default function Home({ allUsers, allSquads }) {
 
   function createGravatarModalBody() {
     return (
-      <div className={styles.gravatar_modal_body}>
+      <div className={styles.gravatar__modal_body}>
         <a href='https://en.gravatar.com/' target='_blank' rel="noreferrer">Gravatar</a>
         <input type="text" id="gravatarEmail" name="gravatarEmail" placeholder="Email do Gravatar" ref={inputEmailGravatarRef} />
       </div>
@@ -140,14 +140,14 @@ export default function Home({ allUsers, allSquads }) {
       <div
         key={user.userId}
         className={styles.user}>
-        <button className={styles.user_delete_button} onClick={() => { setUserSelected(user); setShowDeleteModal(true); }}>
+        <button className={styles.user__delete_button} onClick={() => { setUserSelected(user); setShowDeleteModal(true); }}>
           <DeleteForeverOutlinedIcon fontSize='small' />
         </button>
         <Checkbox
           user={user}
           setUsers={setUsers}
         ></Checkbox>
-        <span className={styles.user_name}>{user.name}</span>
+        <span className={styles.user__name}>{user.name}</span>
         <div onClick={() => {setUserSelected(user); setShowGravatarModal(true)}}>
           <GravatarIcon
             user={user}
@@ -239,8 +239,8 @@ export default function Home({ allUsers, allSquads }) {
       >
         {createGravatarModalBody()}
       </Modal>
-      <div className={styles.dropdown_container}>
-        <div className={styles.dropdown_squads}>
+      <div className={styles.dropdown__container}>
+        <div className={styles.dropdown__squads}>
           <label>Squad:</label>
           <select onChange={handleSquadChange}>
             {squads.length > 0 && squads.map(squad => squadDisplay(squad))}
@@ -251,8 +251,8 @@ export default function Home({ allUsers, allSquads }) {
           </div>
         </div>
       </div>
-      <div className={styles.drawn_container}>
-        <div className={styles.drawn_users}>
+      <div className={styles.drawn__container}>
+        <div className={styles.drawn__users}>
           <div>
             {users.length > 0 && users.map(user => userDisplay(user))}
           </div>
@@ -261,10 +261,10 @@ export default function Home({ allUsers, allSquads }) {
             <button onClick={() => handleInsert()}>Adicionar</button>
           </div>
         </div>
-        <div className={styles.drawn_button_container}>
-          <button className={styles.drawn_button} onClick={handleDrawn}>Sortear</button>
+        <div className={styles.drawn__button_container}>
+          <button className={styles.drawn__button} onClick={handleDrawn}>Sortear</button>
         </div>
-        <div className={styles.drawn_name}>{drawn}</div>
+        <div className={styles.drawn__name}>{drawn}</div>
       </div>
       <div>made with 💖 by <a className={styles.link} href="https://github.com/FelipeM920">Felipe</a></div>
     </section>

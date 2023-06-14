@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './Modal.module.css'; 
+import styles from './Modal.module.scss'; 
 
 function Modal({ handleClose, show, children, buttonConfirmName, buttonCancelName, title, mainText }) {
 
@@ -7,19 +7,19 @@ function Modal({ handleClose, show, children, buttonConfirmName, buttonCancelNam
   
   return (
     <div className={showHideClassName}>
-      <section className={styles.modal_main}>
-        <div className={styles.modal_main__container}>
-          <span className={styles.modal_main__title}>{title}</span>
-          <span className={styles.modal_main__text}>{mainText}</span>
+      <section className={styles.modal__main}>
+        <div className={styles.modal__main_container}>
+          <span className={styles.modal__main_title}>{title}</span>
+          <span className={styles.modal__main_text}>{mainText}</span>
           <div>
             {children}
           </div>
         </div>
-        <div className={styles.modal_main__buttons_container}>
-          <button className={styles.modal_main__cancel_button} type="button" onClick={() => handleClose(false)}>
+        <div className={styles.modal__main_buttons_container}>
+          <button className={styles.modal__main_cancel_button} type="button" onClick={() => handleClose(false)}>
             {buttonCancelName}
           </button>
-          <button className={styles.modal_main__confirm_button} type="button" onClick={() => handleClose(true)}>
+          <button className={styles.modal__main_confirm_button} type="button" onClick={() => handleClose(true)}>
             {buttonConfirmName}
           </button>
         </div>
