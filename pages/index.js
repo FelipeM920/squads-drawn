@@ -69,6 +69,18 @@ async function callDelete(userId) {
   return users.data;
 }
 
+async function callDeleteSquad(squadId) {
+  let res = await fetch('/api/squads', {
+    method: "DELETE",
+    body: JSON.stringify({
+      squadId: squadId
+    })
+  });
+
+  let squads = await res.json();
+  return squads.data;
+}
+
 async function callUpdate(userForUpdate) {
   let res = await fetch('/api/users', {
     method: "PUT",
@@ -91,6 +103,8 @@ export default function Home({ allUsers, allSquads }) {
   const [squad, setSquad] = useState(1);
   const [userSelected, setUserSelected] = useState(0);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showDeleteSquadModal, setShowDeleteSquadModal] = useState(false);
+  const [squadForDelete, setSquadForDelete] = useState(0);
   const [showGravatarModal, setShowGravatarModal] = useState(false);
   const inputEmailGravatarRef = useRef(null);
   const deleteModalTexts = {
@@ -101,6 +115,11 @@ export default function Home({ allUsers, allSquads }) {
   const gravatarModalTexts = {
     modalGravatarTitle: 'Atualizar Imagem do Gravatar',
     modalGravatarMainText: `Insira o email do Gravatar para atualizar a imagem do usuário.`,
+  }
+
+  const deleteSquadModalTexts = {
+    modalDeleteSquadTitle: 'Tem certeza que deseja excluir?',
+    modalDeleteSquadMainText: `O Squad ${squadForDelete.name} será excluído permanentemente.`
   }
 
   let nameToAdd = 'Nome';
@@ -202,6 +221,12 @@ export default function Home({ allUsers, allSquads }) {
     });
   }
 
+  function handleDeleteSquad(squadId) {
+    callDeleteSquad(squadId).then(response => {
+      setSquads(response);
+    });
+  }
+
   function closeModalDelete(okForDelete) {
     if (okForDelete)
       handleDelete(userSelected.userId, userSelected.squad);
@@ -218,12 +243,21 @@ export default function Home({ allUsers, allSquads }) {
     setShowGravatarModal(false);
   }
 
+  function closeModalDeleteSquad(okForDeleteSquad) {
+    if (okForDeleteSquad)
+      handleDeleteSquad(squadForDelete.id)
+    setShowDeleteSquadModal(false);
+  }
+
   function squadDisplaytab(squadTab) {
     const classes = squadTab.id === squad ? `${styles.nav__tabs} ${styles.nav__active}` : `${styles.nav__tabs}`;
     return (
-      <div key={squadTab.id} value={squadTab.id} onClick={handleSquadChange} className={classes}>
-        {squadTab.name}
-      </div>
+      <>
+        <div key={squadTab.id} value={squadTab.id} onClick={handleSquadChange} className={classes}>
+          {squadTab.name}
+        </div>
+        <button className={styles.nav__delete_button} onClick={() => { setSquadForDelete(squadTab); setShowDeleteSquadModal(true) }}><DeleteForeverOutlinedIcon fontSize='small' /></button>
+      </>
     )
   }
 
@@ -248,7 +282,15 @@ export default function Home({ allUsers, allSquads }) {
       >
         {createGravatarModalBody()}
       </Modal>
-
+      <Modal
+        show={showDeleteSquadModal}
+        handleClose={closeModalDeleteSquad}
+        buttonConfirmName={'Sim'}
+        buttonCancelName={'Não'}
+        title={deleteSquadModalTexts.modalDeleteSquadTitle}
+        mainText={deleteSquadModalTexts.modalDeleteSquadMainText}
+      >
+      </Modal>
       <nav id='nav' className={styles.nav__container}>
         {squads.length > 0 && squads.map(squad => squadDisplaytab(squad))}
 

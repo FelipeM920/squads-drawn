@@ -111,10 +111,10 @@
   &__tabs {
     display: flex;
     padding: 10px 20px;
-    margin: 0 5px;
+    margin-left: 10px;
     border: 1px solid #fff;
     border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    position: relative;
     cursor: pointer;
   }
 
@@ -125,7 +125,7 @@
 
   &__new_tab_container {
     display: flex;
-    margin-left: 5px;
+    margin-left: 10px;
 
     &_button {
       display: flex;
@@ -147,5 +147,12 @@
       border-top-left-radius: 10px;
       outline: none;
     }
+  }
+
+  &__delete_button {
+    border: 1px solid #fff;
+    border-top-right-radius: 10px;
+    background: rgba(153, 0, 0);
+    cursor: pointer;
   }
 }

@@ -14,5 +14,13 @@ export default async function handler(req, res) {
       const postResult = await db.collection("squad").find({}).toArray();
       res.json(postResult);
       break;
+    case "DELETE":
+      const { squadId } = JSON.parse(req.body);
+      let myDelete = await db.collection("squad").deleteOne({
+        id: squadId,
+      });
+      const deleteResults = await db.collection("squad").find({}).toArray();
+      res.json({ status: 200, data: deleteResults });
+      break;
   }
 }
