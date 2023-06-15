@@ -27,7 +27,6 @@ export async function getServerSideProps() {
   };
 }
 
-
 async function callGet(idSquad) {
   let res = await fetch(`/api/users?idSquad=${idSquad}`, {
     method: "GET",
@@ -173,12 +172,6 @@ export default function Home({ allUsers, allSquads }) {
           ></GravatarIcon>
         </div>
       </div>
-    )
-  }
-
-  function squadDisplay(squad) {
-    return (
-      <option key={squad.id} value={squad.id}>{squad.name}</option>
     )
   }
 
